@@ -31,4 +31,10 @@ export class IterableClient {
     const response = await this.client.post('/templates/email/upsert', data)
     return response.data
   }
+
+  /* ==== MESSAGETYPES CALLS ==== */
+  async getMessageTypes() {
+    const response = await this.client.get('/messageTypes')
+    return response.data
+  }
 }
