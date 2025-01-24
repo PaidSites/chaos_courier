@@ -56,4 +56,15 @@ export class IterableClient {
     const response = await this.client.post('/campaigns/create', data)
     return response.data
   }
+
+  /* ==== LIST CALLS ==== */
+  async getLists() {
+    const response = await this.client.get('/lists')
+    return response.data
+  }
+
+  async getListUserCount(listId: number) {
+    const response = await this.client.get(`/lists/${listId}/size`)
+    return response.data
+  }
 }
