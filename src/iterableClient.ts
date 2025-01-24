@@ -14,6 +14,7 @@ export class IterableClient {
       headers: { 'Api-Key': options.apiKey },
     })
   }
+
   /* ==== TEMPLATE CALLS ==== */
   async getTemplates() {
     const response = await this.client.get('/templates')
@@ -35,6 +36,24 @@ export class IterableClient {
   /* ==== MESSAGETYPES CALLS ==== */
   async getMessageTypes() {
     const response = await this.client.get('/messageTypes')
+    return response.data
+  }
+
+  /* ==== CAMPAIGN CALLS ==== */
+  async getCampaignsMetadata() {
+    const response = await this.client.get('/campaigns')
+    return response.data
+  }
+
+  async getCampaignMetrics(campaignId: number) {
+    const response = await this.client.get(
+      `/campaigns/metrics?campaignId=${campaignId}`
+    )
+    return response.data
+  }
+
+  async createCampaign(data: Record<string, any>) {
+    const response = await this.client.post('/campaigns/create', data)
     return response.data
   }
 }
