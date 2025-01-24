@@ -14,9 +14,21 @@ export class IterableClient {
       headers: { 'Api-Key': options.apiKey },
     })
   }
-
+  /* ==== TEMPLATE CALLS ==== */
   async getTemplates() {
     const response = await this.client.get('/templates')
+    return response.data
+  }
+
+  async getTemplateById(templateType: string, templateId: number) {
+    const response = await this.client.get(
+      `/templates/${templateType}/get?templateId=${templateId}`
+    )
+    return response.data
+  }
+
+  async createTemplate(data: Record<string, any>) {
+    const response = await this.client.post('/templates/email/upsert', data)
     return response.data
   }
 }
