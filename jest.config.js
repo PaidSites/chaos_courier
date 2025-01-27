@@ -1,5 +1,1 @@
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  verbose: true,
-}
+export default { preset: 'ts-jest', testEnvironment: 'node', verbose: true }
