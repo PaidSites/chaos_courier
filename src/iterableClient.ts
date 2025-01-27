@@ -19,9 +19,10 @@ export class IterableClient {
   // - add types to function calls
 
   /* ==== TEMPLATE CALLS ==== */
-  // TODO: implement ?messageMedium=${medium} as a optional parameter
-  async getTemplates() {
-    const response = await this.client.get('/templates')
+  async getTemplates(medium?: string) {
+    const response = medium
+      ? await this.client.get(`/templates?messageMedium=${medium}`)
+      : await this.client.get('/templates')
     return response.data
   }
 
