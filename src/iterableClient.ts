@@ -1,4 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
+import {
+  iterableCreateTemplateResponse,
+  iterableTemplateResponse,
+  iterableTemplatesResponse,
+} from './iterableInterfaces'
 
 interface IterableOptions {
   apiKey: string
@@ -19,21 +24,26 @@ export class IterableClient {
   // - add types to function calls
 
   /* ==== TEMPLATE CALLS ==== */
-  async getTemplates(medium?: string) {
+  async getTemplates(medium?: string): Promise<iterableTemplatesResponse> {
     const response = medium
       ? await this.client.get(`/templates?messageMedium=${medium}`)
       : await this.client.get('/templates')
     return response.data
   }
 
-  async getTemplateById(templateType: string, templateId: number) {
+  async getTemplateById(
+    templateType: string,
+    templateId: number
+  ): Promise<iterableTemplateResponse> {
     const response = await this.client.get(
       `/templates/${templateType}/get?templateId=${templateId}`
     )
     return response.data
   }
 
-  async createTemplate(data: Record<string, any>) {
+  async createTemplate(
+    data: Record<string, any>
+  ): Promise<iterableCreateTemplateResponse> {
     const response = await this.client.post('/templates/email/upsert', data)
     return response.data
   }
