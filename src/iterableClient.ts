@@ -14,8 +14,12 @@ export class IterableClient {
       headers: { 'Api-Key': options.apiKey },
     })
   }
+  // TODO:
+  // - implement rxjs observable
+  // - add types to function calls
 
   /* ==== TEMPLATE CALLS ==== */
+  // TODO: implement ?messageMedium=${medium} as a optional parameter
   async getTemplates() {
     const response = await this.client.get('/templates')
     return response.data

@@ -1,18 +1,19 @@
 {
   "name": "chaos-courier",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "package for interfacing with iterable's api",
+  "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
     "test": "jest"
   },
   "author": "amachado93",
