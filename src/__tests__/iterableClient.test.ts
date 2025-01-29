@@ -248,4 +248,48 @@ describe('IterableClient', () => {
     expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData)
     expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
   })
+
+  // test for getLists()
+  it('should call /lists endpoint', async () => {
+    const mockResponse = {
+      lists: [
+        {
+          id: 123456,
+          name: 'list name',
+          description: 'description of list',
+          createdAt: 456789,
+          listType: 'list type is...',
+        },
+        {
+          id: 987654,
+          name: 'list name2',
+          createdAt: 654321,
+          listType: 'list type is...',
+        },
+      ],
+    }
+
+    mock.onGet('https://api.iterable.com/api/lists').reply(200, mockResponse)
+    const response = await client.getLists()
+
+    expect(response).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(1)
+    expect(mock.history.get[0].url).toBe('/lists')
+    expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for getUserListCount()
+  it('should call /lists/${listId}/size endpoint', async () => {
+    const mockResponse = 2
+    const listId = 123456
+    mock
+      .onGet(`https://api.iterable.com/api/lists/${listId}/size`)
+      .reply(200, mockResponse)
+    const response = await client.getListUserCount(listId)
+
+    expect(response).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(1)
+    expect(mock.history.get[0].url).toBe(`/lists/${listId}/size`)
+    expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
+  })
 })
