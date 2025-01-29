@@ -1,5 +1,8 @@
 import axios, { AxiosInstance } from 'axios'
 import {
+  iterableCampaignMedataResponse,
+  iterableCampaignMetricsResponse,
+  iterableCreateCampaignBody,
   iterableCreateTemplateResponse,
   iterableMessageTypeResponse,
   iterableTemplateResponse,
@@ -56,19 +59,21 @@ export class IterableClient {
   }
 
   /* ==== CAMPAIGN CALLS ==== */
-  async getCampaignsMetadata() {
+  async getCampaignsMetadata(): Promise<iterableCampaignMedataResponse> {
     const response = await this.client.get('/campaigns')
     return response.data
   }
 
-  async getCampaignMetrics(campaignId: number) {
+  async getCampaignMetrics(
+    campaignId: number
+  ): Promise<iterableCampaignMetricsResponse> {
     const response = await this.client.get(
       `/campaigns/metrics?campaignId=${campaignId}`
     )
     return response.data
   }
 
-  async createCampaign(data: Record<string, any>) {
+  async createCampaign(data: iterableCreateCampaignBody) {
     const response = await this.client.post('/campaigns/create', data)
     return response.data
   }

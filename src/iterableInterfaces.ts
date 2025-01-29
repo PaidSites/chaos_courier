@@ -4,6 +4,7 @@ export interface iterableApiResponse<T = any> {
   body?: T
 }
 
+/* ===== Templates ===== */
 export interface Template {
   templateId: number
   metadata?: {
@@ -45,6 +46,7 @@ export interface iterableCreateTemplateResponse extends iterableApiResponse {
   params?: string | null
 }
 
+/* ===== MessageTypes ===== */
 export interface MessageType {
   id: number
   createdAt: number
@@ -56,3 +58,37 @@ export interface MessageType {
 
 export interface iterableMessageTypeResponse
   extends iterableApiResponse<MessageType> {}
+
+/* ===== Campaigns ===== */
+export interface Campaign {
+  id: number
+  createdAt: number
+  updatedAt: number
+  name: string
+  templateId: number
+  messageMedium: string
+  createdByUserId: string
+  updatedByUserId: string
+  campaignState: string
+  workflowId: number
+  labels: string[]
+  type: string
+}
+export interface iterableCreateCampaignBody {
+  name: string
+  listIds: number[]
+  templateId: number
+  dataFields: Record<string, string>
+}
+
+export interface iterableCreateCampaignResponse extends iterableApiResponse {
+  campaignId: number
+}
+
+export interface iterableCampaignMetricsResponse
+  extends iterableApiResponse<string> {}
+
+export interface iterableCampaignMedataResponse
+  extends iterableApiResponse<Campaign[]> {}
+
+/* ===== Lists ===== */
