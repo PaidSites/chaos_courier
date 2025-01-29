@@ -4,6 +4,8 @@ import {
   iterableCampaignMetricsResponse,
   iterableCreateCampaignBody,
   iterableCreateTemplateResponse,
+  iterableGetListsResponse,
+  iterableListCountResponse,
   iterableMessageTypeResponse,
   iterableTemplateResponse,
   iterableTemplatesResponse,
@@ -79,12 +81,12 @@ export class IterableClient {
   }
 
   /* ==== LIST CALLS ==== */
-  async getLists() {
+  async getLists(): Promise<iterableGetListsResponse> {
     const response = await this.client.get('/lists')
     return response.data
   }
 
-  async getListUserCount(listId: number) {
+  async getListUserCount(listId: number): Promise<iterableListCountResponse> {
     const response = await this.client.get(`/lists/${listId}/size`)
     return response.data
   }

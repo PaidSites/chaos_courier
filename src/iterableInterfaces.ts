@@ -92,3 +92,15 @@ export interface iterableCampaignMedataResponse
   extends iterableApiResponse<Campaign[]> {}
 
 /* ===== Lists ===== */
+export interface List {
+  id: number
+  name: string
+  description?: string
+  createdAt: number
+  listType: string
+}
+
+export interface iterableGetListsResponse extends iterableApiResponse<List[]> {}
+
+export interface iterableListCountResponse
+  extends iterableApiResponse<number> {}
