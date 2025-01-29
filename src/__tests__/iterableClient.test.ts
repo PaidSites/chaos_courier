@@ -129,4 +129,26 @@ describe('IterableClient', () => {
     expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData) // Check the request body
     expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
   })
+
+  // test for getMessageTypes()
+  it('should call /messageTypes endpoint on getMessageTypes', async () => {
+    const mockResponse = {
+      id: 123456,
+      createdAt: 123456,
+      updatedAt: 123456,
+      name: 'coolname',
+      channelId: 123456,
+      subscriptionPolicy: 'subscription policy',
+    }
+
+    mock
+      .onGet('https://api.iterable.com/api/messageTypes')
+      .reply(200, mockResponse)
+
+    const response = await client.getMessageTypes()
+    expect(response).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(1)
+    expect(mock.history.get[0].url).toBe('/messageTypes')
+    expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
+  })
 })
