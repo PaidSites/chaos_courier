@@ -151,4 +151,101 @@ describe('IterableClient', () => {
     expect(mock.history.get[0].url).toBe('/messageTypes')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
+
+  // test for getCampaignsMetadata()
+  it('should call /campaigns endpoint on getCampaignsMetadata', async () => {
+    const mockResponse = {
+      campaigns: [
+        {
+          id: 123456,
+          createdAt: 123456,
+          updatedAt: 123456,
+          name: 'cool name',
+          templateId: 123456,
+          messageMedium: 'message Medium',
+          createdByUserId: 'user ID',
+          updatedByUserId: 'user ID',
+          campaignState: 'state is here',
+          workflowId: 123456,
+          labels: ['label1', 'label2'],
+          type: 'type here',
+        },
+        {
+          id: 123456,
+          createdAt: 123456,
+          updatedAt: 123456,
+          name: 'cool name',
+          templateId: 123456,
+          messageMedium: 'message Medium',
+          createdByUserId: 'user ID',
+          updatedByUserId: 'user ID',
+          campaignState: 'state is here',
+          workflowId: 123456,
+          labels: ['label1', 'label2'],
+          type: 'type here',
+        },
+      ],
+    }
+
+    mock
+      .onGet('https://api.iterable.com/api/campaigns')
+      .reply(200, mockResponse)
+
+    const response = await client.getCampaignsMetadata()
+
+    expect(response).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(1)
+    expect(mock.history.get[0].url).toBe('/campaigns')
+    expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for getCampaignMetrics()
+  it('should call /campaigns/metrics?campaignId endpoint', async () => {
+    const mockResponse =
+      'this is a plaintext response that the endpoint sends back.'
+    const campaignId = 123456
+
+    mock
+      .onGet(
+        `https://api.iterable.com/api/campaigns/metrics?campaignId=${campaignId}`
+      )
+      .reply(200, mockResponse)
+    const response = await client.getCampaignMetrics(campaignId)
+
+    expect(response).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(1)
+    expect(mock.history.get[0].url).toBe(
+      `/campaigns/metrics?campaignId=${campaignId}`
+    )
+    expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for createCampaign()
+  it('should call /campaigns/create endpoint', async () => {
+    const mockResponse = {
+      campaignId: 123456,
+    }
+    const mockData = {
+      name: 'cool campaign',
+      listIds: [123, 124, 125],
+      templateId: 987654,
+      dataFields: {
+        preheader: 'this is my preheader',
+        headline: 'this is my headline',
+        subject: 'this is my subjectline',
+        content: '<p>content belongs in html tags!<p>',
+      },
+    }
+
+    mock
+      .onPost('https://api.iterable.com/api/campaigns/create', mockData)
+      .reply(200, mockResponse)
+
+    const response = await client.createCampaign(mockData)
+    expect(response).toEqual(mockResponse)
+    expect(mock.history.post.length).toBe(1)
+    expect(mock.history.post[0].url).toBe('/campaigns/create')
+    expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData)
+    expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
+  })
 })
