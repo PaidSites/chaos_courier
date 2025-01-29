@@ -44,3 +44,15 @@ export interface iterableCreateTemplateResponse extends iterableApiResponse {
   code: string
   params?: string | null
 }
+
+export interface MessageType {
+  id: number
+  createdAt: number
+  updatedAt: number
+  name: string
+  channelId: number
+  subscriptionPolicy: string
+}
+
+export interface iterableMessageTypeResponse
+  extends iterableApiResponse<MessageType> {}

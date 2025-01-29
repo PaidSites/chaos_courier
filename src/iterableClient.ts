@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import {
   iterableCreateTemplateResponse,
+  iterableMessageTypeResponse,
   iterableTemplateResponse,
   iterableTemplatesResponse,
 } from './iterableInterfaces'
@@ -49,7 +50,7 @@ export class IterableClient {
   }
 
   /* ==== MESSAGETYPES CALLS ==== */
-  async getMessageTypes() {
+  async getMessageTypes(): Promise<iterableMessageTypeResponse> {
     const response = await this.client.get('/messageTypes')
     return response.data
   }
