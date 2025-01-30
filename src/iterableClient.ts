@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import {
   iterableCampaignMedataResponse,
   iterableCampaignMetricsResponse,
@@ -9,6 +9,7 @@ import {
   iterableMessageTypeResponse,
   iterableTemplateResponse,
   iterableTemplatesResponse,
+  Template,
 } from './iterableInterfaces'
 
 interface IterableOptions {
@@ -30,11 +31,11 @@ export class IterableClient {
   // - add types to function calls
 
   /* ==== TEMPLATE CALLS ==== */
-  async getTemplates(medium?: string): Promise<iterableTemplatesResponse> {
-    const response = medium
+  async getTemplates(medium?: string): Promise<Template[]> {
+    const response: AxiosResponse<{ templates: Template[] }> = medium
       ? await this.client.get(`/templates?messageMedium=${medium}`)
       : await this.client.get('/templates')
-    return response.data
+    return response.data.templates
   }
 
   async getTemplateById(
