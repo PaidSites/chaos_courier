@@ -13,37 +13,36 @@ describe('IterableClient', () => {
 
   // test for getTemplates()
   it('should call the /templates endpoint on getTemplates', async () => {
-    const mockResponse = {
-      templates: [
-        {
-          templateId: 12345678,
-          createdAt: 1234567890123,
-          updatedAt: 1234567890123,
-          name: 'Template name',
-          creatorUserId: 'someuser@test.com',
-          messageTypeId: 123456,
-        },
-        {
-          templateId: 12345678,
-          createdAt: 1234567890123,
-          updatedAt: 1234567890123,
-          name: 'Template name 2',
-          creatorUserId: 'someuser@test.com',
-          messageTypeId: 123456,
-        },
-        {
-          templateId: 12345678,
-          createdAt: 1234567890123,
-          updatedAt: 1234567890123,
-          name: 'Template name 3',
-          creatorUserId: 'someuser@test.com',
-          messageTypeId: 123456,
-        },
-      ],
-    }
+    const mockResponse = [
+      {
+        templateId: 12345678,
+        createdAt: 1234567890123,
+        updatedAt: 1234567890123,
+        name: 'Template name',
+        creatorUserId: 'someuser@test.com',
+        messageTypeId: 123456,
+      },
+      {
+        templateId: 12345678,
+        createdAt: 1234567890123,
+        updatedAt: 1234567890123,
+        name: 'Template name 2',
+        creatorUserId: 'someuser@test.com',
+        messageTypeId: 123456,
+      },
+      {
+        templateId: 12345678,
+        createdAt: 1234567890123,
+        updatedAt: 1234567890123,
+        name: 'Template name 3',
+        creatorUserId: 'someuser@test.com',
+        messageTypeId: 123456,
+      },
+    ]
+
     mock
       .onGet('https://api.iterable.com/api/templates')
-      .reply(200, mockResponse)
+      .reply(200, { templates: mockResponse })
 
     const response = await client.getTemplates()
 
@@ -132,18 +131,28 @@ describe('IterableClient', () => {
 
   // test for getMessageTypes()
   it('should call /messageTypes endpoint on getMessageTypes', async () => {
-    const mockResponse = {
-      id: 123456,
-      createdAt: 123456,
-      updatedAt: 123456,
-      name: 'coolname',
-      channelId: 123456,
-      subscriptionPolicy: 'subscription policy',
-    }
+    const mockResponse = [
+      {
+        id: 123456,
+        createdAt: 123456,
+        updatedAt: 123456,
+        name: 'coolname',
+        channelId: 123456,
+        subscriptionPolicy: 'subscription policy',
+      },
+      {
+        id: 123456,
+        createdAt: 123456,
+        updatedAt: 123456,
+        name: 'coolname',
+        channelId: 123456,
+        subscriptionPolicy: 'subscription policy',
+      },
+    ]
 
     mock
       .onGet('https://api.iterable.com/api/messageTypes')
-      .reply(200, mockResponse)
+      .reply(200, { messageTypes: mockResponse })
 
     const response = await client.getMessageTypes()
     expect(response).toEqual(mockResponse)
@@ -154,42 +163,40 @@ describe('IterableClient', () => {
 
   // test for getCampaignsMetadata()
   it('should call /campaigns endpoint on getCampaignsMetadata', async () => {
-    const mockResponse = {
-      campaigns: [
-        {
-          id: 123456,
-          createdAt: 123456,
-          updatedAt: 123456,
-          name: 'cool name',
-          templateId: 123456,
-          messageMedium: 'message Medium',
-          createdByUserId: 'user ID',
-          updatedByUserId: 'user ID',
-          campaignState: 'state is here',
-          workflowId: 123456,
-          labels: ['label1', 'label2'],
-          type: 'type here',
-        },
-        {
-          id: 123456,
-          createdAt: 123456,
-          updatedAt: 123456,
-          name: 'cool name',
-          templateId: 123456,
-          messageMedium: 'message Medium',
-          createdByUserId: 'user ID',
-          updatedByUserId: 'user ID',
-          campaignState: 'state is here',
-          workflowId: 123456,
-          labels: ['label1', 'label2'],
-          type: 'type here',
-        },
-      ],
-    }
+    const mockResponse = [
+      {
+        id: 123456,
+        createdAt: 123456,
+        updatedAt: 123456,
+        name: 'cool name',
+        templateId: 123456,
+        messageMedium: 'message Medium',
+        createdByUserId: 'user ID',
+        updatedByUserId: 'user ID',
+        campaignState: 'state is here',
+        workflowId: 123456,
+        labels: ['label1', 'label2'],
+        type: 'type here',
+      },
+      {
+        id: 123456,
+        createdAt: 123456,
+        updatedAt: 123456,
+        name: 'cool name',
+        templateId: 123456,
+        messageMedium: 'message Medium',
+        createdByUserId: 'user ID',
+        updatedByUserId: 'user ID',
+        campaignState: 'state is here',
+        workflowId: 123456,
+        labels: ['label1', 'label2'],
+        type: 'type here',
+      },
+    ]
 
     mock
       .onGet('https://api.iterable.com/api/campaigns')
-      .reply(200, mockResponse)
+      .reply(200, { campaigns: mockResponse })
 
     const response = await client.getCampaignsMetadata()
 
@@ -251,25 +258,25 @@ describe('IterableClient', () => {
 
   // test for getLists()
   it('should call /lists endpoint', async () => {
-    const mockResponse = {
-      lists: [
-        {
-          id: 123456,
-          name: 'list name',
-          description: 'description of list',
-          createdAt: 456789,
-          listType: 'list type is...',
-        },
-        {
-          id: 987654,
-          name: 'list name2',
-          createdAt: 654321,
-          listType: 'list type is...',
-        },
-      ],
-    }
+    const mockResponse = [
+      {
+        id: 123456,
+        name: 'list name',
+        description: 'description of list',
+        createdAt: 456789,
+        listType: 'list type is...',
+      },
+      {
+        id: 987654,
+        name: 'list name2',
+        createdAt: 654321,
+        listType: 'list type is...',
+      },
+    ]
 
-    mock.onGet('https://api.iterable.com/api/lists').reply(200, mockResponse)
+    mock
+      .onGet('https://api.iterable.com/api/lists')
+      .reply(200, { lists: mockResponse })
     const response = await client.getLists()
 
     expect(response).toEqual(mockResponse)
