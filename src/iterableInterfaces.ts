@@ -1,9 +1,3 @@
-export interface iterableApiResponse<T = any> {
-  headers: Record<string, string>
-  statusCode: number
-  body?: T
-}
-
 /* ===== Templates ===== */
 export interface Template {
   templateId: number
@@ -34,13 +28,7 @@ export interface Template {
   creatorUserId: string
 }
 
-export interface iterableTemplatesResponse
-  extends iterableApiResponse<Template[]> {}
-
-export interface iterableTemplateResponse
-  extends iterableApiResponse<Template> {}
-
-export interface iterableCreateTemplateResponse extends iterableApiResponse {
+export interface iterableCreateTemplateResponse {
   msg: string
   code: string
   params?: string | null
@@ -56,14 +44,13 @@ export interface MessageType {
   subscriptionPolicy: string
 }
 
-export interface iterableMessageTypeResponse
-  extends iterableApiResponse<MessageType> {}
-
 /* ===== Campaigns ===== */
 export interface Campaign {
   id: number
   createdAt: number
   updatedAt: number
+  startedAt?: number
+  endedAt?: number
   name: string
   templateId: number
   messageMedium: string
@@ -73,6 +60,7 @@ export interface Campaign {
   workflowId: number
   labels: string[]
   type: string
+  listIds?: number[]
 }
 export interface iterableCreateCampaignBody {
   name: string
@@ -80,16 +68,6 @@ export interface iterableCreateCampaignBody {
   templateId: number
   dataFields: Record<string, string>
 }
-
-export interface iterableCreateCampaignResponse extends iterableApiResponse {
-  campaignId: number
-}
-
-export interface iterableCampaignMetricsResponse
-  extends iterableApiResponse<string> {}
-
-export interface iterableCampaignMedataResponse
-  extends iterableApiResponse<Campaign[]> {}
 
 /* ===== Lists ===== */
 export interface List {
@@ -99,8 +77,3 @@ export interface List {
   createdAt: number
   listType: string
 }
-
-export interface iterableGetListsResponse extends iterableApiResponse<List[]> {}
-
-export interface iterableListCountResponse
-  extends iterableApiResponse<number> {}
