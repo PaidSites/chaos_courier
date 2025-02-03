@@ -299,10 +299,13 @@ describe('IterableClient', () => {
     mock
       .onGet('https://api.iterable.com/api/lists')
       .reply(200, { lists: mockResponse })
+
     const response = await client.getLists()
+    const rxResponse = await firstValueFrom(client.getLists$())
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe('/lists')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
@@ -314,10 +317,13 @@ describe('IterableClient', () => {
     mock
       .onGet(`https://api.iterable.com/api/lists/${listId}/size`)
       .reply(200, mockResponse)
+
     const response = await client.getListUserCount(listId)
+    const rxResponse = await firstValueFrom(client.getListUserCount$(listId))
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(`/lists/${listId}/size`)
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })

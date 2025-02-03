@@ -119,11 +119,19 @@ export class IterableClient {
     )
     return response.data.lists
   }
+  // Observable based method
+  getLists$ = (): Observable<List[]> => {
+    return from(this.getLists())
+  }
 
   async getListUserCount(listId: number): Promise<number> {
     const response: AxiosResponse<number> = await this.client.get(
       `/lists/${listId}/size`
     )
     return response.data
+  }
+  // Observable based method
+  getListUserCount$ = (listId: number): Observable<number> => {
+    return from(this.getListUserCount(listId))
   }
 }
