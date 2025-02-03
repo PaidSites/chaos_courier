@@ -213,9 +213,11 @@ describe('IterableClient', () => {
       .reply(200, { campaigns: mockResponse })
 
     const response = await client.getCampaignsMetadata()
+    const rxResponse = await firstValueFrom(client.getCampaignsMetadata$())
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe('/campaigns')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
@@ -231,10 +233,13 @@ describe('IterableClient', () => {
         `https://api.iterable.com/api/campaigns/metrics?campaignId=${campaignId}`
       )
       .reply(200, mockResponse)
+
     const response = await client.getCampaignMetrics(campaignId)
+    const rxResponse = await firstValueFrom(client.getCampaignMetrics$(campaignId))
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(
       `/campaigns/metrics?campaignId=${campaignId}`
     )
@@ -263,8 +268,11 @@ describe('IterableClient', () => {
       .reply(200, mockResponse)
 
     const response = await client.createCampaign(mockData)
+    const rxResponse = await firstValueFrom(client.createCampaign$(mockData))
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.post.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.post.length).toBe(2)
     expect(mock.history.post[0].url).toBe('/campaigns/create')
     expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData)
     expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)

@@ -84,12 +84,20 @@ export class IterableClient {
       await this.client.get('/campaigns')
     return response.data.campaigns
   }
+  // Observable based method
+  getCampaignsMetadata$ = (): Observable<Campaign[]> => {
+    return from(this.getCampaignsMetadata())
+  }
 
   async getCampaignMetrics(campaignId: number): Promise<string> {
     const response: AxiosResponse<string> = await this.client.get(
       `/campaigns/metrics?campaignId=${campaignId}`
     )
     return response.data
+  }
+  // Observable based method
+  getCampaignMetrics$ = (campaignId: number): Observable<string> => {
+    return from(this.getCampaignMetrics(campaignId))
   }
 
   async createCampaign(data: iterableCreateCampaignBody): Promise<number> {
@@ -98,6 +106,10 @@ export class IterableClient {
       data
     )
     return response.data
+  }
+  // Observable based method
+  createCampaign$ = (data: iterableCreateCampaignBody): Observable<number> => {
+    return from(this.createCampaign(data))
   }
 
   /* ==== LIST CALLS ==== */
