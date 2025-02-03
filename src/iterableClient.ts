@@ -73,6 +73,10 @@ export class IterableClient {
       await this.client.get('/messageTypes')
     return response.data.messageTypes
   }
+  // Obervable based method
+  getMessageTypes$ = (): Observable<MessageType[]> => {
+    return from(this.getMessageTypes())
+  }
 
   /* ==== CAMPAIGN CALLS ==== */
   async getCampaignsMetadata(): Promise<Campaign[]> {

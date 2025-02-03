@@ -166,8 +166,11 @@ describe('IterableClient', () => {
       .reply(200, { messageTypes: mockResponse })
 
     const response = await client.getMessageTypes()
+    const rxResponse = await firstValueFrom(client.getMessageTypes$())
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe('/messageTypes')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
