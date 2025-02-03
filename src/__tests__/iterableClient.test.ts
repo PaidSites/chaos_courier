@@ -1,6 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { IterableClient } from '../iterableClient'
+import { firstValueFrom } from 'rxjs'
 
 describe('IterableClient', () => {
   const mock = new MockAdapter(axios)
@@ -44,10 +45,14 @@ describe('IterableClient', () => {
       .onGet('https://api.iterable.com/api/templates')
       .reply(200, { templates: mockResponse })
 
+    // Axios / Promised based method
     const response = await client.getTemplates()
+    // Observable based method
+    const rxResponse = await firstValueFrom(client.getTemplates$())
 
+    expect(rxResponse).toEqual(mockResponse)
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1) // ensures get request was made
+    expect(mock.history.get.length).toBe(2) // ensures get request was made
     expect(mock.history.get[0].url).toBe('/templates') // checks the url
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey) // checks the headers
   })
@@ -91,8 +96,11 @@ describe('IterableClient', () => {
       .reply(200, mockResponse)
 
     const response = await client.getTemplateById(templateType, templateId)
+    const rxResponse = await firstValueFrom(client.getTemplatebyId$(templateType, templateId))
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(
       `/templates/${templateType}/get?templateId=${templateId}`
     )
@@ -122,8 +130,11 @@ describe('IterableClient', () => {
       .reply(200, mockResponse)
 
     const response = await client.createTemplate(mockData)
+    const rxResponse = await firstValueFrom(client.createTemplate$(mockData))
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.post.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.post.length).toBe(2)
     expect(mock.history.post[0].url).toBe('/templates/email/upsert')
     expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData) // Check the request body
     expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
@@ -155,8 +166,11 @@ describe('IterableClient', () => {
       .reply(200, { messageTypes: mockResponse })
 
     const response = await client.getMessageTypes()
+    const rxResponse = await firstValueFrom(client.getMessageTypes$())
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe('/messageTypes')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
@@ -199,9 +213,11 @@ describe('IterableClient', () => {
       .reply(200, { campaigns: mockResponse })
 
     const response = await client.getCampaignsMetadata()
+    const rxResponse = await firstValueFrom(client.getCampaignsMetadata$())
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe('/campaigns')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
@@ -217,10 +233,13 @@ describe('IterableClient', () => {
         `https://api.iterable.com/api/campaigns/metrics?campaignId=${campaignId}`
       )
       .reply(200, mockResponse)
+
     const response = await client.getCampaignMetrics(campaignId)
+    const rxResponse = await firstValueFrom(client.getCampaignMetrics$(campaignId))
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(
       `/campaigns/metrics?campaignId=${campaignId}`
     )
@@ -249,8 +268,11 @@ describe('IterableClient', () => {
       .reply(200, mockResponse)
 
     const response = await client.createCampaign(mockData)
+    const rxResponse = await firstValueFrom(client.createCampaign$(mockData))
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.post.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.post.length).toBe(2)
     expect(mock.history.post[0].url).toBe('/campaigns/create')
     expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData)
     expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
@@ -277,10 +299,13 @@ describe('IterableClient', () => {
     mock
       .onGet('https://api.iterable.com/api/lists')
       .reply(200, { lists: mockResponse })
+
     const response = await client.getLists()
+    const rxResponse = await firstValueFrom(client.getLists$())
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe('/lists')
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })
@@ -292,10 +317,13 @@ describe('IterableClient', () => {
     mock
       .onGet(`https://api.iterable.com/api/lists/${listId}/size`)
       .reply(200, mockResponse)
+
     const response = await client.getListUserCount(listId)
+    const rxResponse = await firstValueFrom(client.getListUserCount$(listId))
 
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(`/lists/${listId}/size`)
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
   })

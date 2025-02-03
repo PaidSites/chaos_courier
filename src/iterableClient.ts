@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { Observable, from } from 'rxjs'
 import {
   Campaign,
   iterableCreateCampaignBody,
@@ -32,6 +33,10 @@ export class IterableClient {
       : await this.client.get('/templates')
     return response.data.templates
   }
+  // Observable based method
+  getTemplates$ = (medium?: string): Observable<Template[]> => {
+    return from(this.getTemplates(medium))
+  }
 
   async getTemplateById(
     templateType: string,
@@ -42,6 +47,11 @@ export class IterableClient {
     )
     return response.data
   }
+  // Observable based method
+  getTemplatebyId$ = (templateType: string,
+    templateId: number): Observable<Template> => {
+    return from(this.getTemplateById(templateType, templateId))
+  }
 
   async createTemplate(
     data: Record<string, any>
@@ -50,12 +60,22 @@ export class IterableClient {
       await this.client.post('/templates/email/upsert', data)
     return response.data
   }
+  // Obervable based method
+  createTemplate$ = (
+    data: Record<string, any>
+  ): Observable<iterableCreateTemplateResponse> => {
+    return from(this.createTemplate(data))
+  }
 
   /* ==== MESSAGETYPES CALLS ==== */
   async getMessageTypes(): Promise<MessageType[]> {
     const response: AxiosResponse<{ messageTypes: MessageType[] }> =
       await this.client.get('/messageTypes')
     return response.data.messageTypes
+  }
+  // Obervable based method
+  getMessageTypes$ = (): Observable<MessageType[]> => {
+    return from(this.getMessageTypes())
   }
 
   /* ==== CAMPAIGN CALLS ==== */
@@ -64,12 +84,20 @@ export class IterableClient {
       await this.client.get('/campaigns')
     return response.data.campaigns
   }
+  // Observable based method
+  getCampaignsMetadata$ = (): Observable<Campaign[]> => {
+    return from(this.getCampaignsMetadata())
+  }
 
   async getCampaignMetrics(campaignId: number): Promise<string> {
     const response: AxiosResponse<string> = await this.client.get(
       `/campaigns/metrics?campaignId=${campaignId}`
     )
     return response.data
+  }
+  // Observable based method
+  getCampaignMetrics$ = (campaignId: number): Observable<string> => {
+    return from(this.getCampaignMetrics(campaignId))
   }
 
   async createCampaign(data: iterableCreateCampaignBody): Promise<number> {
@@ -79,6 +107,10 @@ export class IterableClient {
     )
     return response.data
   }
+  // Observable based method
+  createCampaign$ = (data: iterableCreateCampaignBody): Observable<number> => {
+    return from(this.createCampaign(data))
+  }
 
   /* ==== LIST CALLS ==== */
   async getLists(): Promise<List[]> {
@@ -87,11 +119,19 @@ export class IterableClient {
     )
     return response.data.lists
   }
+  // Observable based method
+  getLists$ = (): Observable<List[]> => {
+    return from(this.getLists())
+  }
 
   async getListUserCount(listId: number): Promise<number> {
     const response: AxiosResponse<number> = await this.client.get(
       `/lists/${listId}/size`
     )
     return response.data
+  }
+  // Observable based method
+  getListUserCount$ = (listId: number): Observable<number> => {
+    return from(this.getListUserCount(listId))
   }
 }
