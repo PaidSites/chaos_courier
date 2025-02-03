@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { Observable, from } from 'rxjs'
 import {
   Campaign,
   iterableCreateCampaignBody,
@@ -32,6 +33,10 @@ export class IterableClient {
       : await this.client.get('/templates')
     return response.data.templates
   }
+  // Observable based method
+  getTemplates$ = (medium?: string): Observable<Template[]> => {
+    return from(this.getTemplates(medium))
+  }
 
   async getTemplateById(
     templateType: string,
@@ -42,6 +47,11 @@ export class IterableClient {
     )
     return response.data
   }
+  // Observable based method
+  getTemplatebyId$ = (templateType: string,
+    templateId: number): Observable<Template> => {
+    return from(this.getTemplateById(templateType, templateId))
+  }
 
   async createTemplate(
     data: Record<string, any>
@@ -49,6 +59,12 @@ export class IterableClient {
     const response: AxiosResponse<iterableCreateTemplateResponse> =
       await this.client.post('/templates/email/upsert', data)
     return response.data
+  }
+  // Obervable based method
+  createTemplate$ = (
+    data: Record<string, any>
+  ): Observable<iterableCreateTemplateResponse> => {
+    return from(this.createTemplate(data))
   }
 
   /* ==== MESSAGETYPES CALLS ==== */

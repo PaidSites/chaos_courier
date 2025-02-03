@@ -1,6 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { IterableClient } from '../iterableClient'
+import { firstValueFrom } from 'rxjs'
 
 describe('IterableClient', () => {
   const mock = new MockAdapter(axios)
@@ -44,10 +45,14 @@ describe('IterableClient', () => {
       .onGet('https://api.iterable.com/api/templates')
       .reply(200, { templates: mockResponse })
 
+    // Axios / Promised based method
     const response = await client.getTemplates()
+    // Observable based method
+    const rxResponse = await firstValueFrom(client.getTemplates$())
 
+    expect(rxResponse).toEqual(mockResponse)
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1) // ensures get request was made
+    expect(mock.history.get.length).toBe(2) // ensures get request was made
     expect(mock.history.get[0].url).toBe('/templates') // checks the url
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey) // checks the headers
   })
@@ -91,8 +96,11 @@ describe('IterableClient', () => {
       .reply(200, mockResponse)
 
     const response = await client.getTemplateById(templateType, templateId)
+    const rxResponse = await firstValueFrom(client.getTemplatebyId$(templateType, templateId))
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.get.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(
       `/templates/${templateType}/get?templateId=${templateId}`
     )
@@ -122,8 +130,11 @@ describe('IterableClient', () => {
       .reply(200, mockResponse)
 
     const response = await client.createTemplate(mockData)
+    const rxResponse = await firstValueFrom(client.createTemplate$(mockData))
+
     expect(response).toEqual(mockResponse)
-    expect(mock.history.post.length).toBe(1)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.post.length).toBe(2)
     expect(mock.history.post[0].url).toBe('/templates/email/upsert')
     expect(JSON.parse(mock.history.post[0].data)).toEqual(mockData) // Check the request body
     expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
