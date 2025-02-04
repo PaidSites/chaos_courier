@@ -23,8 +23,6 @@ export class IterableClient {
       headers: { 'Api-Key': options.apiKey },
     })
   }
-  // TODO:
-  // - implement rxjs observable
 
   /* ==== TEMPLATE CALLS ==== */
   async getTemplates(medium?: string): Promise<Template[]> {
