@@ -1,2 +1,2 @@
-export { IterableClient } from './iterableClient'
+export * from './iterableClient'
 export * from './iterableInterfaces'
