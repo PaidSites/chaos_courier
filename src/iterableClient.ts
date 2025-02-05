@@ -8,13 +8,14 @@ import {
   List,
   MessageType,
   Template,
-  TemplateTypes,
 } from './iterableInterfaces'
 
 interface IterableOptions {
   apiKey: string
   baseURL?: string
 }
+
+export type TemplateTypes = 'email' | 'inapp' | 'push' | 'sms'
 
 export class IterableClient {
   private client: AxiosInstance
