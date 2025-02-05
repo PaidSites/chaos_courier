@@ -15,8 +15,6 @@ interface IterableOptions {
   baseURL?: string
 }
 
-export type TemplateTypes = 'email' | 'inapp' | 'push' | 'sms'
-
 export class IterableClient {
   private client: AxiosInstance
 
@@ -28,19 +26,19 @@ export class IterableClient {
   }
 
   /* ==== TEMPLATE CALLS ==== */
-  async getTemplates(medium?: TemplateTypes): Promise<Template[]> {
+  async getTemplates(medium?: string): Promise<Template[]> {
     const response: AxiosResponse<{ templates: Template[] }> = medium
       ? await this.client.get(`/templates?messageMedium=${medium}`)
       : await this.client.get('/templates')
     return response.data.templates
   }
   // Observable based method
-  getTemplates$ = (medium?: TemplateTypes): Observable<Template[]> => {
+  getTemplates$ = (medium?: string): Observable<Template[]> => {
     return from(this.getTemplates(medium))
   }
 
   async getTemplateById(
-    templateType: TemplateTypes,
+    templateType: string,
     templateId: number
   ): Promise<Template> {
     const response: AxiosResponse<Template> = await this.client.get(
@@ -50,7 +48,7 @@ export class IterableClient {
   }
   // Observable based method
   getTemplatebyId$ = (
-    templateType: TemplateTypes,
+    templateType: string,
     templateId: number
   ): Observable<Template> => {
     return from(this.getTemplateById(templateType, templateId))
@@ -58,7 +56,7 @@ export class IterableClient {
 
   async createTemplate(
     data: Record<string, any>,
-    templateType: TemplateTypes
+    templateType: string
   ): Promise<iterableTemplateResponse> {
     const response: AxiosResponse<iterableTemplateResponse> =
       await this.client.post(`/templates/${templateType}/upsert`, data)
@@ -67,14 +65,14 @@ export class IterableClient {
   // Obervable based method
   createTemplate$ = (
     data: Record<string, any>,
-    templateType: TemplateTypes
+    templateType: string
   ): Observable<iterableTemplateResponse> => {
     return from(this.createTemplate(data, templateType))
   }
 
   async updateTemplate(
     data: Template,
-    templateType: TemplateTypes
+    templateType: string
   ): Promise<iterableTemplateResponse> {
     const response: AxiosResponse<iterableTemplateResponse> =
       await this.client.post(`/templates/${templateType}/update`, data)
@@ -83,7 +81,7 @@ export class IterableClient {
   // Observable based method
   updateTemplate$ = (
     data: Template,
-    templateType: TemplateTypes
+    templateType: string
   ): Observable<iterableTemplateResponse> => {
     return from(this.updateTemplate(data, templateType))
   }
