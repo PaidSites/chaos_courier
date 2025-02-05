@@ -124,13 +124,14 @@ describe('IterableClient', () => {
       messageTypeId: 123456,
       creatorUserId: 'test@example.com',
     }
+    const templateType = 'email'
 
     mock
       .onPost('https://api.iterable.com/api/templates/email/upsert', mockData)
       .reply(200, mockResponse)
 
-    const response = await client.createTemplate(mockData)
-    const rxResponse = await firstValueFrom(client.createTemplate$(mockData))
+    const response = await client.createTemplate(mockData, templateType)
+    const rxResponse = await firstValueFrom(client.createTemplate$(mockData, templateType))
 
     expect(response).toEqual(mockResponse)
     expect(rxResponse).toEqual(mockResponse)
