@@ -28,10 +28,16 @@ export interface Template {
   creatorUserId: string
 }
 
-export interface iterableCreateTemplateResponse {
+export interface iterableTemplateResponse {
   msg: string
   code: string
   params?: string | null
+}
+
+export interface iterableDeleteTemplateResponse {
+  success: number[]
+  failed: number[]
+  failureReason: string
 }
 
 /* ===== MessageTypes ===== */

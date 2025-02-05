@@ -3,7 +3,8 @@ import { Observable, from } from 'rxjs'
 import {
   Campaign,
   iterableCreateCampaignBody,
-  iterableCreateTemplateResponse,
+  iterableDeleteTemplateResponse,
+  iterableTemplateResponse,
   List,
   MessageType,
   Template,
@@ -53,16 +54,38 @@ export class IterableClient {
 
   async createTemplate(
     data: Record<string, any>
-  ): Promise<iterableCreateTemplateResponse> {
-    const response: AxiosResponse<iterableCreateTemplateResponse> =
+  ): Promise<iterableTemplateResponse> {
+    const response: AxiosResponse<iterableTemplateResponse> =
       await this.client.post('/templates/email/upsert', data)
     return response.data
   }
   // Obervable based method
   createTemplate$ = (
     data: Record<string, any>
-  ): Observable<iterableCreateTemplateResponse> => {
+  ): Observable<iterableTemplateResponse> => {
     return from(this.createTemplate(data))
+  }
+
+  async updateTemplate(data: Template, templateType: string):
+    Promise<iterableTemplateResponse> {
+    const response: AxiosResponse<iterableTemplateResponse> = await this.client.post(`/templates/${templateType}/update`, data)
+    return response.data
+  }
+  // Observable based method
+  updateTemplate$ = (data: Template, templateType: string): Observable<iterableTemplateResponse> => {
+    return from(this.updateTemplate(data, templateType))
+  }
+
+  async deleteTemplate(data: number[]) {
+    const constructedData = {
+      "ids": data
+    }
+    const response: AxiosResponse<iterableDeleteTemplateResponse> = await this.client.post('/templates/bulkDelete', constructedData)
+    return response.data
+  }
+  // Observable based method
+  deleteTemplate$ = (data: number[]): Observable<iterableDeleteTemplateResponse> => {
+    return from(this.deleteTemplate(data))
   }
 
   /* ==== MESSAGETYPES CALLS ==== */
