@@ -1,4 +1,11 @@
 /* ===== Templates ===== */
+export enum TemplateTypes {
+  EMAIL = 'email',
+  IN_APP = 'inapp',
+  PUSH = 'push',
+  SMS = 'sms',
+}
+
 export interface Template {
   templateId: number
   metadata?: {

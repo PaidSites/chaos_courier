@@ -8,6 +8,7 @@ import {
   List,
   MessageType,
   Template,
+  TemplateTypes,
 } from './iterableInterfaces'
 
 interface IterableOptions {
@@ -26,19 +27,19 @@ export class IterableClient {
   }
 
   /* ==== TEMPLATE CALLS ==== */
-  async getTemplates(medium?: string): Promise<Template[]> {
+  async getTemplates(medium?: TemplateTypes): Promise<Template[]> {
     const response: AxiosResponse<{ templates: Template[] }> = medium
       ? await this.client.get(`/templates?messageMedium=${medium}`)
       : await this.client.get('/templates')
     return response.data.templates
   }
   // Observable based method
-  getTemplates$ = (medium?: string): Observable<Template[]> => {
+  getTemplates$ = (medium?: TemplateTypes): Observable<Template[]> => {
     return from(this.getTemplates(medium))
   }
 
   async getTemplateById(
-    templateType: string,
+    templateType: TemplateTypes,
     templateId: number
   ): Promise<Template> {
     const response: AxiosResponse<Template> = await this.client.get(
@@ -47,44 +48,57 @@ export class IterableClient {
     return response.data
   }
   // Observable based method
-  getTemplatebyId$ = (templateType: string,
-    templateId: number): Observable<Template> => {
+  getTemplatebyId$ = (
+    templateType: TemplateTypes,
+    templateId: number
+  ): Observable<Template> => {
     return from(this.getTemplateById(templateType, templateId))
   }
 
   async createTemplate(
-    data: Record<string, any>
+    data: Record<string, any>,
+    templateType: TemplateTypes
   ): Promise<iterableTemplateResponse> {
     const response: AxiosResponse<iterableTemplateResponse> =
-      await this.client.post('/templates/email/upsert', data)
+      await this.client.post(`/templates/${templateType}/upsert`, data)
     return response.data
   }
   // Obervable based method
   createTemplate$ = (
-    data: Record<string, any>
+    data: Record<string, any>,
+    templateType: TemplateTypes
   ): Observable<iterableTemplateResponse> => {
-    return from(this.createTemplate(data))
+    return from(this.createTemplate(data, templateType))
   }
 
-  async updateTemplate(data: Template, templateType: string):
-    Promise<iterableTemplateResponse> {
-    const response: AxiosResponse<iterableTemplateResponse> = await this.client.post(`/templates/${templateType}/update`, data)
+  async updateTemplate(
+    data: Template,
+    templateType: TemplateTypes
+  ): Promise<iterableTemplateResponse> {
+    const response: AxiosResponse<iterableTemplateResponse> =
+      await this.client.post(`/templates/${templateType}/update`, data)
     return response.data
   }
   // Observable based method
-  updateTemplate$ = (data: Template, templateType: string): Observable<iterableTemplateResponse> => {
+  updateTemplate$ = (
+    data: Template,
+    templateType: TemplateTypes
+  ): Observable<iterableTemplateResponse> => {
     return from(this.updateTemplate(data, templateType))
   }
 
   async deleteTemplate(data: number[]) {
     const constructedData = {
-      "ids": data
+      ids: data,
     }
-    const response: AxiosResponse<iterableDeleteTemplateResponse> = await this.client.post('/templates/bulkDelete', constructedData)
+    const response: AxiosResponse<iterableDeleteTemplateResponse> =
+      await this.client.post('/templates/bulkDelete', constructedData)
     return response.data
   }
   // Observable based method
-  deleteTemplate$ = (data: number[]): Observable<iterableDeleteTemplateResponse> => {
+  deleteTemplate$ = (
+    data: number[]
+  ): Observable<iterableDeleteTemplateResponse> => {
     return from(this.deleteTemplate(data))
   }
 
