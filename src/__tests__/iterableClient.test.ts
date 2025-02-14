@@ -1,7 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { IterableClient } from '../iterableClient'
-import { firstValueFrom } from 'rxjs'
+import { async, firstValueFrom } from 'rxjs'
 
 describe('IterableClient', () => {
   const mock = new MockAdapter(axios)
@@ -327,5 +327,136 @@ describe('IterableClient', () => {
     expect(mock.history.get.length).toBe(2)
     expect(mock.history.get[0].url).toBe(`/lists/${listId}/size`)
     expect(mock.history.get[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for archiveCampaigns()
+  it('should call /campaigns/archive endpoint', async () => {
+    const mockResponse = {
+      success: [123, 789],
+      failed: [456]
+    }
+    const mockData = {
+      campaignIds: [123, 456, 789]
+    }
+    mock.onPost('https://api.iterable.com/api/campaigns/archive', mockData).reply(200, mockResponse)
+
+    const response = await client.archiveCampaigns(mockData)
+    const rxResponse = await firstValueFrom(client.archiveCampaigns$(mockData))
+
+    expect(response).toEqual(mockResponse)
+    expect(rxResponse).toEqual(mockResponse)
+    expect(mock.history.post.length).toBe(2)
+    expect(mock.history.post[0].url).toBe('/campaigns/archive')
+    expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for activateTriggeredCampaign()
+  it('should call /campaigns/activateTriggered endpoint', async () => {
+    const mockData = {
+      campaignId: 123456
+    }
+    const mockRes = {
+      msg: "Success! Fired campaign id: 123456",
+      code: "Success",
+      params: null
+    }
+    mock.onPost('https://api.iterable.com/api/campaigns/activateTriggered', mockData).reply(200, mockRes)
+
+    const response = await client.activateTriggeredCampaign(mockData)
+    const rxResponse = await firstValueFrom(client.activateTriggeredCampaign$(mockData))
+
+    expect(response).toEqual(mockRes)
+    expect(rxResponse).toEqual(mockRes)
+    expect(mock.history.post.length).toBe(2)
+    expect(mock.history.post[0].url).toBe('/campaigns/activateTriggered')
+    expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for triggerCampaign()
+  it('should call /campaigns/trigger endpoint', async () => {
+    const mockData = {
+      campaignId: 456789,
+      listIds: [
+        123456
+      ],
+      dataFields: {
+        preheader: "This is a sample preheader!",
+        headline: "New Headline for Testing! Wow!",
+        subject: "This is a test subject line!",
+        content: "<p>html in my content! yahoo!</p>",
+        fromName: "Alex"
+      }
+    }
+    const mockRes = {
+      code: "Success",
+      msg: "Good job!",
+      params: null
+    }
+    mock.onPost('https://api.iterable.com/api/campaigns/trigger', mockData).reply(200, mockRes)
+
+    const response = await client.triggerCampaign(mockData)
+    const rxRes = await firstValueFrom(client.triggerCampaign$(mockData))
+
+    expect(response).toEqual(mockRes)
+    expect(rxRes).toEqual(mockRes)
+    expect(mock.history.post.length).toBe(2)
+    expect(mock.history.post[0].url).toBe('/campaigns/trigger')
+    expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for deactivateTriggeredCampaign()
+  it('should call /campaigns/deactivateTriggered endpoint', async () => {
+    const mockData = {
+      campaignId: 123456
+    }
+    const mockRes = {
+      code: "Success",
+      msg: "Yay! Good job",
+      params: null
+    }
+
+    mock.onPost('https://api.iterable.com/api/campaigns/deactivateTriggered', mockData).reply(200, mockRes)
+
+    const response = await client.deactivateTriggeredCampaign(mockData)
+    const rxRes = await firstValueFrom(client.deactivateTriggeredCampaign$(mockData))
+
+    expect(response).toEqual(mockRes)
+    expect(rxRes).toEqual(mockRes)
+    expect(mock.history.post.length).toBe(2)
+    expect(mock.history.post[0].url).toBe('/campaigns/deactivateTriggered')
+    expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
+  })
+
+  // test for sendEmailToAddress()
+  it('should call /email/target endpoint', async () => {
+    const mockData = {
+      campaignId: 123456,
+      listIds: [456, 789],
+      recipientEmail: "test@email.com",
+      dataFields: {
+        prehead: "This is a sample preheader!",
+        headline: "This is the best headline.",
+        subject: "This is a test subject line!",
+        content: "<p>Need I say more???</p>",
+        fromName: "Happy Guy"
+      }
+    }
+    const mockRes = {
+      code: "Success",
+      msg: "Good job, email sent.",
+      params: null
+    }
+
+    mock.onPost('https://api.iterable.com/api/email/target', mockData).reply(200, mockRes)
+
+    const response = await client.sendEmailToAddress(mockData)
+    const rxRes = await firstValueFrom(client.sendEmailToAddress$(mockData))
+
+    expect(response).toEqual(mockRes)
+    expect(rxRes).toEqual(mockRes)
+    expect(mock.history.post.length).toBe(2)
+    expect(mock.history.post[0].url).toBe('/email/target')
+    expect(mock.history.post[0].headers?.['Api-Key']).toBe(apiKey)
+
   })
 })
