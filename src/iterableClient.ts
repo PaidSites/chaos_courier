@@ -9,6 +9,7 @@ import {
   iterableTriggerCampaignBody,
   List,
   MessageType,
+  sendEmailBody,
   Template,
 } from './iterableInterfaces'
 
@@ -207,5 +208,15 @@ export class IterableClient {
   // Observable based method
   getListUserCount$ = (listId: number): Observable<number> => {
     return from(this.getListUserCount(listId))
+  }
+
+  /* ==== EMAIL CALL ==== */
+  async sendEmailToAddress(data: sendEmailBody): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/email/target', data)
+    return response.data
+  }
+  // Observable based method
+  sendEmailToAddress$ = (data: sendEmailBody): Observable<iterableCampaignResponse> => {
+    return from(this.sendEmailToAddress(data))
   }
 }

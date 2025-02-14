@@ -95,3 +95,10 @@ export interface List {
   createdAt: number
   listType: string
 }
+
+/* ===== Lists ===== */
+export interface sendEmailBody extends iterableTriggerCampaignBody {
+  recipientEmail?: string
+  recipientUserId?: string
+  sendAt?: string
+}
