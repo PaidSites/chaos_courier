@@ -1,6 +1,6 @@
 {
   "name": "chaos-courier",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "package for interfacing with iterable's api",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -23,6 +23,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.10",
     "axios-mock-adapter": "^2.1.0",
+    "esbuild": "^0.25.0",
     "jest": "^29.7.0",
     "rxjs-marbles": "^7.0.1",
     "ts-jest": "^29.2.5",
