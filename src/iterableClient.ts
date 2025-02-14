@@ -2,9 +2,11 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { Observable, from } from 'rxjs'
 import {
   Campaign,
+  iterableCampaignResponse,
   iterableCreateCampaignBody,
   iterableDeleteTemplateResponse,
   iterableTemplateResponse,
+  iterableTriggerCampaignBody,
   List,
   MessageType,
   Template,
@@ -144,6 +146,44 @@ export class IterableClient {
   // Observable based method
   createCampaign$ = (data: iterableCreateCampaignBody): Observable<number> => {
     return from(this.createCampaign(data))
+  }
+
+  async archiveCampaign(data: Record<string, number[]>): Promise<Record<string, number[]>> {
+    const response: AxiosResponse<Record<string, number[]>> = await this.client.post(
+      '/campaigns/archive',
+      data
+    )
+    return response.data
+  }
+  // Observable based method
+  archiveCampaign$ = (data: Record<string, number[]>): Observable<Record<string, number[]>> => {
+    return from(this.archiveCampaign(data))
+  }
+
+  async activateTriggeredCampaign(data: Record<string, number>): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/campaigns/activateTriggered', data)
+    return response.data
+  }
+  // Observable based method
+  activateTriggeredCampaign$ = (data: Record<string, number>): Observable<iterableCampaignResponse> => {
+    return from(this.activateTriggeredCampaign(data))
+  }
+
+  async triggerCampaign(data: iterableTriggerCampaignBody): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/campaigns/trigger', data)
+    return response.data
+  }
+  triggerCampaign$ = (data: iterableTriggerCampaignBody): Observable<iterableCampaignResponse> => {
+    return from(this.triggerCampaign(data))
+  }
+
+  async deactivateTriggeredCampaign(data: Record<string, number>): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/campaigns/deactivateTriggered', data)
+    return response.data
+  }
+  // Observable based method
+  deactivateTriggeredCampaign$ = (data: Record<string, number>): Observable<iterableCampaignResponse> => {
+    return from(this.deactivateTriggeredCampaign(data))
   }
 
   /* ==== LIST CALLS ==== */

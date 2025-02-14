@@ -74,6 +74,18 @@ export interface iterableCreateCampaignBody {
   templateId: number
   dataFields: Record<string, string>
 }
+export interface iterableCampaignResponse {
+  msg: string
+  code: string
+  params: Record<string, any>
+}
+export interface iterableTriggerCampaignBody {
+  campaignId: number
+  listIds: number[]
+  dataFields: Record<string, string>
+  allowRepeatMarketingSends?: boolean
+  suppressionListIds?: number[]
+}
 
 /* ===== Lists ===== */
 export interface List {
