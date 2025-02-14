@@ -73,6 +73,22 @@ export interface iterableCreateCampaignBody {
   listIds: number[]
   templateId: number
   dataFields: Record<string, string>
+  suppressionListIds?: number[]
+  sendMode?: string
+  defaultTimeZone?: string
+  startTimeZone?: string
+}
+export interface iterableCampaignResponse {
+  msg: string
+  code: string
+  params: Record<string, any>
+}
+export interface iterableTriggerCampaignBody {
+  campaignId: number
+  listIds: number[]
+  dataFields: Record<string, string>
+  allowRepeatMarketingSends?: boolean
+  suppressionListIds?: number[]
 }
 
 /* ===== Lists ===== */
@@ -82,4 +98,11 @@ export interface List {
   description?: string
   createdAt: number
   listType: string
+}
+
+/* ===== Lists ===== */
+export interface sendEmailBody extends iterableTriggerCampaignBody {
+  recipientEmail?: string
+  recipientUserId?: string
+  sendAt?: string
 }
