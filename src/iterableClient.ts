@@ -149,7 +149,7 @@ export class IterableClient {
     return from(this.createCampaign(data))
   }
 
-  async archiveCampaign(data: Record<string, number[]>): Promise<Record<string, number[]>> {
+  async archiveCampaigns(data: Record<string, number[]>): Promise<Record<string, number[]>> {
     const response: AxiosResponse<Record<string, number[]>> = await this.client.post(
       '/campaigns/archive',
       data
@@ -157,8 +157,8 @@ export class IterableClient {
     return response.data
   }
   // Observable based method
-  archiveCampaign$ = (data: Record<string, number[]>): Observable<Record<string, number[]>> => {
-    return from(this.archiveCampaign(data))
+  archiveCampaigns$ = (data: Record<string, number[]>): Observable<Record<string, number[]>> => {
+    return from(this.archiveCampaigns(data))
   }
 
   async activateTriggeredCampaign(data: Record<string, number>): Promise<iterableCampaignResponse> {
