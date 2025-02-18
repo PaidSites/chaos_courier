@@ -138,11 +138,11 @@ export class IterableClient {
   }
 
   async createCampaign(data: iterableCreateCampaignBody): Promise<number> {
-    const response: AxiosResponse<number> = await this.client.post(
+    const response: AxiosResponse<{ campaignId: number }> = await this.client.post(
       '/campaigns/create',
       data
     )
-    return response.data
+    return response.data.campaignId
   }
   // Observable based method
   createCampaign$ = (data: iterableCreateCampaignBody): Observable<number> => {

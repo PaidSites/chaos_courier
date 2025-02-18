@@ -70,9 +70,9 @@ export interface Campaign {
 }
 export interface iterableCreateCampaignBody {
   name: string
-  listIds: number[]
   templateId: number
-  dataFields: Record<string, string>
+  listIds?: number[]
+  dataFields?: Record<string, string>
   suppressionListIds?: number[]
   sendMode?: string
   defaultTimeZone?: string
