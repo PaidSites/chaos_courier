@@ -101,7 +101,10 @@ export interface List {
 }
 
 /* ===== Lists ===== */
-export interface sendEmailBody extends iterableTriggerCampaignBody {
+export interface sendEmailBody {
+  allowRepeatMarketingSends?: boolean
+  campaignId: number
+  dataFields?: Record<string, string>
   recipientEmail?: string
   recipientUserId?: string
   sendAt?: string
