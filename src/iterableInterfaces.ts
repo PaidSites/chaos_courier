@@ -99,8 +99,28 @@ export interface List {
   createdAt: number
   listType: string
 }
+export interface ListSubBody {
+  listId: number
+  subscribers: Record<string, any>[]
+  updateExistingUsersOnly?: boolean
+}
+export interface ListRemoveBody {
+  listId: number
+  subscribers: Record<string, string>[]
+  campaignId?: number
+  channelUnsubscribe?: boolean
+}
+export interface ListResponse {
+  createdFields: string[]
+  failCount: number
+  failedUpdates: Record<string, string>[]
+  filteredOutFields: string[]
+  invalidEmails: string[]
+  invalidUserIds: string[]
+  successCount: number
+}
 
-/* ===== Lists ===== */
+/* ===== Email ===== */
 export interface sendEmailBody {
   allowRepeatMarketingSends?: boolean
   campaignId: number

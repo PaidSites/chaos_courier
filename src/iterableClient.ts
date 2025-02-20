@@ -8,6 +8,9 @@ import {
   iterableTemplateResponse,
   iterableTriggerCampaignBody,
   List,
+  ListRemoveBody,
+  ListResponse,
+  ListSubBody,
   MessageType,
   sendEmailBody,
   Template,
@@ -208,6 +211,42 @@ export class IterableClient {
   // Observable based method
   getListUserCount$ = (listId: number): Observable<number> => {
     return from(this.getListUserCount(listId))
+  }
+
+  async createStaticList(data: Record<string, string>): Promise<number> {
+    const response: AxiosResponse<{ listId: number }> = await this.client.post('/lists', data)
+    return response.data.listId
+  }
+  // Observable based method
+  createStaticList$ = (data: Record<string, string>): Observable<number> => {
+    return from(this.createStaticList(data))
+  }
+
+  async subscribeToList(data: ListSubBody): Promise<ListResponse> {
+    const response: AxiosResponse<ListResponse> = await this.client.post('/lists/subscribe', data)
+    return response.data
+  }
+  // Observable based method
+  subscribeToList$ = (data: ListSubBody): Observable<ListResponse> => {
+    return from(this.subscribeToList(data))
+  }
+
+  async unsubUsersFromList(data: ListRemoveBody): Promise<ListResponse> {
+    const response: AxiosResponse<ListResponse> = await this.client.post('/lists/unsubscribe', data)
+    return response.data
+  }
+  // Observable based method
+  unsubUsersFromList$ = (data: ListRemoveBody): Observable<ListResponse> => {
+    return from(this.unsubUsersFromList(data))
+  }
+
+  async deleteList(listId: number): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.delete(`lists/${listId}`)
+    return response.data
+  }
+  // Observable based method
+  deleteList$ = (listId: number): Observable<iterableCampaignResponse> => {
+    return from(this.deleteList(listId))
   }
 
   /* ==== EMAIL CALL ==== */
