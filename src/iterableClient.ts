@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { Observable, from } from 'rxjs'
 import {
   Campaign,
+  Channel,
   iterableCampaignResponse,
   iterableCreateCampaignBody,
   iterableDeleteTemplateResponse,
@@ -188,6 +189,15 @@ export class IterableClient {
   // Observable based method
   deactivateTriggeredCampaign$ = (data: Record<string, number>): Observable<iterableCampaignResponse> => {
     return from(this.deactivateTriggeredCampaign(data))
+  }
+
+  /* ==== CHANNEL CALL ==== */
+  async getChannels(): Promise<Channel[]> {
+    const response: AxiosResponse<{ channels: Channel[] }> = await this.client.get('/channels')
+    return response.data.channels
+  }
+  getChannels$ = (): Observable<Channel[]> => {
+    return from(this.getChannels())
   }
 
   /* ==== LIST CALLS ==== */
