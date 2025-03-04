@@ -50,6 +50,14 @@ export interface MessageType {
   subscriptionPolicy: string
 }
 
+/* ===== Channels ===== */
+export interface Channel {
+  channelType: string
+  id: number
+  messageMedium: string
+  name: string
+}
+
 /* ===== Campaigns ===== */
 export interface Campaign {
   id: number
