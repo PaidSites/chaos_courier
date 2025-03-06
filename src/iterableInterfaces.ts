@@ -83,6 +83,7 @@ export interface iterableCreateCampaignBody {
   dataFields?: Record<string, string>
   suppressionListIds?: number[]
   sendMode?: string
+  sendAt?: string
   defaultTimeZone?: string
   startTimeZone?: string
 }
