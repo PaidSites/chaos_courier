@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { Observable, from } from 'rxjs'
 import {
   Campaign,
+  cancelSMSBody,
   Channel,
   iterableCampaignResponse,
   iterableCreateCampaignBody,
@@ -14,6 +15,7 @@ import {
   ListSubBody,
   MessageType,
   sendEmailBody,
+  sendSMSBody,
   Template,
 } from './iterableInterfaces'
 
@@ -251,7 +253,7 @@ export class IterableClient {
   }
 
   async deleteList(listId: number): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.delete(`lists/${listId}`)
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.delete(`/lists/${listId}`)
     return response.data
   }
   // Observable based method
@@ -267,5 +269,24 @@ export class IterableClient {
   // Observable based method
   sendEmailToAddress$ = (data: sendEmailBody): Observable<iterableCampaignResponse> => {
     return from(this.sendEmailToAddress(data))
+  }
+
+  /* ==== SMS CALLS ==== */
+  async sendSMS(data: sendSMSBody): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/sms/target', data)
+    return response.data
+  }
+
+  sendSMS$ = (data: sendSMSBody): Observable<iterableCampaignResponse> => {
+    return from(this.sendSMS(data))
+  }
+
+  async cancelSMS(data: cancelSMSBody): Promise<iterableCampaignResponse> {
+    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/sms/cancel', data)
+    return response.data
+  }
+
+  cancelSMS$ = (data: cancelSMSBody): Observable<iterableCampaignResponse> => {
+    return from(this.cancelSMS(data))
   }
 }
