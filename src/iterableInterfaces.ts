@@ -138,3 +138,21 @@ export interface sendEmailBody {
   recipientUserId?: string
   sendAt?: string
 }
+
+/* ===== SMS ===== */
+export interface sendSMSBody {
+  allowRepeatMarketingSends?: boolean,
+  campaignId: number,
+  dataFields?: Record<string, string>,
+  recipientEmail?: string,
+  recipientUserId?: string,
+  sendAt?: string
+}
+
+export interface cancelSMSBody {
+  campaignId?: number,
+  email?: string,
+  scheduledMessageId?: number,
+  userId?: string
+}
+
