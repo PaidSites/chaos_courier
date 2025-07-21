@@ -1,6 +1,6 @@
 {
   "name": "chaos-courier",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "package for interfacing with iterable's api",
   "type": "module",
   "main": "./dist/index.cjs",
