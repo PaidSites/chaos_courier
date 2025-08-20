@@ -10,7 +10,7 @@ export interface Template {
     messageTypeId: number
     clientTemplateId: string
   }
-  name: string
+  name?: string
   fromName?: string
   fromEmail?: string
   subject?: string
@@ -23,9 +23,10 @@ export interface Template {
   cacheDataFeed?: boolean
   mergeDataFeedContext?: boolean
   clientTemplateId?: string
-  messageTypeId: number
-  createdAt: number
-  creatorUserId: string
+  messageTypeId?: number
+  createdAt?: number
+  creatorUserId?: string
+  message?: string
 }
 
 export interface iterableTemplateResponse {
