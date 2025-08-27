@@ -81,7 +81,7 @@ export interface iterableCreateCampaignBody {
   name: string
   templateId: number
   listIds?: number[]
-  dataFields?: Record<string, string>
+  dataFields?: Record<string, any>
   suppressionListIds?: number[]
   sendMode?: string
   sendAt?: string
