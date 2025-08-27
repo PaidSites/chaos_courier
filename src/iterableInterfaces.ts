@@ -96,7 +96,7 @@ export interface iterableCampaignResponse {
 export interface iterableTriggerCampaignBody {
   campaignId: number
   listIds: number[]
-  dataFields: Record<string, string>
+  dataFields?: Record<string, any>
   allowRepeatMarketingSends?: boolean
   suppressionListIds?: number[]
 }
@@ -134,7 +134,7 @@ export interface ListResponse {
 export interface sendEmailBody {
   allowRepeatMarketingSends?: boolean
   campaignId: number
-  dataFields?: Record<string, string>
+  dataFields?: Record<string, any>
   recipientEmail?: string
   recipientUserId?: string
   sendAt?: string
@@ -144,7 +144,7 @@ export interface sendEmailBody {
 export interface sendSMSBody {
   allowRepeatMarketingSends?: boolean,
   campaignId: number,
-  dataFields?: Record<string, string>,
+  dataFields?: Record<string, any>,
   recipientEmail?: string,
   recipientUserId?: string,
   sendAt?: string
