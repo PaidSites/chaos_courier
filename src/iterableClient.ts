@@ -47,6 +47,15 @@ export class IterableClient {
     return from(this.getTemplates(medium))
   }
 
+  async getPushTemplates(): Promise<PushTemplate[]> {
+    const response: AxiosResponse<{ templates: PushTemplate[] }> = await this.client.get('/templates?messageMedium=push')
+    return response.data.templates
+  }
+  // Observable based method
+  getPushTemplates$ = (): Observable<PushTemplate[]> => {
+    return from(this.getPushTemplates())
+  }
+
   async getTemplateById(
     templateType: string,
     templateId: number
@@ -62,6 +71,21 @@ export class IterableClient {
     templateId: number
   ): Observable<Template> => {
     return from(this.getTemplateById(templateType, templateId))
+  }
+
+  async getPushTemplateById(
+    templateId: number
+  ): Promise<PushTemplate> {
+    const response: AxiosResponse<PushTemplate> = await this.client.get(
+      `/templates/push/get?templateId=${templateId}`
+    )
+    return response.data
+  }
+  // Observable based method
+  getPushTemplatebyId$ = (
+    templateId: number
+  ): Observable<PushTemplate> => {
+    return from(this.getPushTemplateById(templateId))
   }
 
   async createTemplate(
@@ -94,6 +118,20 @@ export class IterableClient {
     templateType: string
   ): Observable<IterableTemplateResponse> => {
     return from(this.updateTemplate(data, templateType))
+  }
+
+  async updatePushTemplate(
+    data: PushTemplate
+  ): Promise<IterableTemplateResponse> {
+    const response: AxiosResponse<IterableTemplateResponse> =
+      await this.client.post(`/templates/push/update`, data)
+    return response.data
+  }
+  // Observable based method
+  updatePushTemplate$ = (
+    data: PushTemplate,
+  ): Observable<IterableTemplateResponse> => {
+    return from(this.updatePushTemplate(data))
   }
 
   async deleteTemplate(data: number[]) {
