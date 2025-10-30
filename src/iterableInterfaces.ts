@@ -29,13 +29,13 @@ export interface Template {
   message?: string
 }
 
-export interface iterableTemplateResponse {
+export interface IterableTemplateResponse {
   msg: string
   code: string
   params?: string | null
 }
 
-export interface iterableDeleteTemplateResponse {
+export interface IterableDeleteTemplateResponse {
   success: number[]
   failed: number[]
   failureReason: string
@@ -77,7 +77,7 @@ export interface Campaign {
   type: string
   listIds?: number[]
 }
-export interface iterableCreateCampaignBody {
+export interface IterableCreateCampaignBody {
   name: string
   templateId: number
   listIds?: number[]
@@ -88,12 +88,12 @@ export interface iterableCreateCampaignBody {
   defaultTimeZone?: string
   startTimeZone?: string
 }
-export interface iterableCampaignResponse {
+export interface IterableCampaignResponse {
   msg: string
   code: string
   params: Record<string, any>
 }
-export interface iterableTriggerCampaignBody {
+export interface IterableTriggerCampaignBody {
   campaignId: number
   listIds: number[]
   dataFields?: Record<string, any>
@@ -131,7 +131,7 @@ export interface ListResponse {
 }
 
 /* ===== Email ===== */
-export interface sendEmailBody {
+export interface SendEmailBody {
   allowRepeatMarketingSends?: boolean
   campaignId: number
   dataFields?: Record<string, any>
@@ -141,7 +141,7 @@ export interface sendEmailBody {
 }
 
 /* ===== SMS ===== */
-export interface sendSMSBody {
+export interface SendSMSBody {
   allowRepeatMarketingSends?: boolean,
   campaignId: number,
   dataFields?: Record<string, any>,
@@ -150,10 +150,71 @@ export interface sendSMSBody {
   sendAt?: string
 }
 
-export interface cancelSMSBody {
+export interface CancelSMSBody {
   campaignId?: number,
   email?: string,
   scheduledMessageId?: number,
   userId?: string
+}
+
+/* ===== Native Push ===== */
+export interface Action {
+  data?: string;
+  type?: string;
+}
+
+export interface ActionIcon {
+  iconType?: Record<string, unknown>;
+  imageName?: string;
+}
+
+export interface Button {
+  action?: Action;
+  actionIcon?: ActionIcon;
+  buttonType?: string; // e.g. "default"
+  identifier?: string;
+  inputPlaceholder?: string;
+  inputTitle?: string;
+  openApp?: boolean;
+  requiresUnlock?: boolean;
+  title?: string;
+}
+
+export interface DeepLink {
+  android?: string;
+  ios?: string;
+}
+
+export interface RichMedia {
+  android?: string;
+  ios?: string;
+}
+
+export interface PushTemplate {
+  badge?: string;
+  buttons?: Button[];
+  cacheDataFeed?: boolean;
+  campaignDataFields?: Record<string, unknown>;
+  campaignId?: number | string | Record<string, unknown>;
+  clientTemplateId?: string;
+  createdAt?: string; // ISO timestamp
+  dataFeedIds?: number[];
+  deeplink?: DeepLink;
+  interruptionLevel?: string;
+  isDefaultLocale?: boolean;
+  isSilentPush?: boolean;
+  locale?: string;
+  mergeDataFeedContext?: boolean;
+  message?: string;
+  messageTypeId?: number;
+  name?: string;
+  payload?: Record<string, unknown>;
+  relevanceScore?: number;
+  richMedia?: RichMedia;
+  sound?: string;
+  templateId: number; // required
+  title?: string;
+  updatedAt?: string; // ISO timestamp
+  wake?: boolean;
 }
 

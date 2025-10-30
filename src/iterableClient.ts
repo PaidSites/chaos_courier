@@ -2,21 +2,22 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { Observable, from } from 'rxjs'
 import {
   Campaign,
-  cancelSMSBody,
+  CancelSMSBody,
   Channel,
-  iterableCampaignResponse,
-  iterableCreateCampaignBody,
-  iterableDeleteTemplateResponse,
-  iterableTemplateResponse,
-  iterableTriggerCampaignBody,
+  IterableCampaignResponse,
+  IterableCreateCampaignBody,
+  IterableDeleteTemplateResponse,
+  IterableTemplateResponse,
+  IterableTriggerCampaignBody,
   List,
   ListRemoveBody,
   ListResponse,
   ListSubBody,
   MessageType,
-  sendEmailBody,
-  sendSMSBody,
+  SendEmailBody,
+  SendSMSBody,
   Template,
+  PushTemplate,
 } from './iterableInterfaces'
 
 interface IterableOptions {
@@ -46,6 +47,15 @@ export class IterableClient {
     return from(this.getTemplates(medium))
   }
 
+  async getPushTemplates(): Promise<PushTemplate[]> {
+    const response: AxiosResponse<{ templates: PushTemplate[] }> = await this.client.get('/templates?messageMedium=push')
+    return response.data.templates
+  }
+  // Observable based method
+  getPushTemplates$ = (): Observable<PushTemplate[]> => {
+    return from(this.getPushTemplates())
+  }
+
   async getTemplateById(
     templateType: string,
     templateId: number
@@ -63,11 +73,26 @@ export class IterableClient {
     return from(this.getTemplateById(templateType, templateId))
   }
 
+  async getPushTemplateById(
+    templateId: number
+  ): Promise<PushTemplate> {
+    const response: AxiosResponse<PushTemplate> = await this.client.get(
+      `/templates/push/get?templateId=${templateId}`
+    )
+    return response.data
+  }
+  // Observable based method
+  getPushTemplatebyId$ = (
+    templateId: number
+  ): Observable<PushTemplate> => {
+    return from(this.getPushTemplateById(templateId))
+  }
+
   async createTemplate(
     data: Record<string, any>,
     templateType: string
-  ): Promise<iterableTemplateResponse> {
-    const response: AxiosResponse<iterableTemplateResponse> =
+  ): Promise<IterableTemplateResponse> {
+    const response: AxiosResponse<IterableTemplateResponse> =
       await this.client.post(`/templates/${templateType}/upsert`, data)
     return response.data
   }
@@ -75,15 +100,15 @@ export class IterableClient {
   createTemplate$ = (
     data: Record<string, any>,
     templateType: string
-  ): Observable<iterableTemplateResponse> => {
+  ): Observable<IterableTemplateResponse> => {
     return from(this.createTemplate(data, templateType))
   }
 
   async updateTemplate(
     data: Template,
     templateType: string
-  ): Promise<iterableTemplateResponse> {
-    const response: AxiosResponse<iterableTemplateResponse> =
+  ): Promise<IterableTemplateResponse> {
+    const response: AxiosResponse<IterableTemplateResponse> =
       await this.client.post(`/templates/${templateType}/update`, data)
     return response.data
   }
@@ -91,22 +116,36 @@ export class IterableClient {
   updateTemplate$ = (
     data: Template,
     templateType: string
-  ): Observable<iterableTemplateResponse> => {
+  ): Observable<IterableTemplateResponse> => {
     return from(this.updateTemplate(data, templateType))
+  }
+
+  async updatePushTemplate(
+    data: PushTemplate
+  ): Promise<IterableTemplateResponse> {
+    const response: AxiosResponse<IterableTemplateResponse> =
+      await this.client.post(`/templates/push/update`, data)
+    return response.data
+  }
+  // Observable based method
+  updatePushTemplate$ = (
+    data: PushTemplate,
+  ): Observable<IterableTemplateResponse> => {
+    return from(this.updatePushTemplate(data))
   }
 
   async deleteTemplate(data: number[]) {
     const constructedData = {
       ids: data,
     }
-    const response: AxiosResponse<iterableDeleteTemplateResponse> =
+    const response: AxiosResponse<IterableDeleteTemplateResponse> =
       await this.client.post('/templates/bulkDelete', constructedData)
     return response.data
   }
   // Observable based method
   deleteTemplate$ = (
     data: number[]
-  ): Observable<iterableDeleteTemplateResponse> => {
+  ): Observable<IterableDeleteTemplateResponse> => {
     return from(this.deleteTemplate(data))
   }
 
@@ -143,7 +182,7 @@ export class IterableClient {
     return from(this.getCampaignMetrics(campaignId))
   }
 
-  async createCampaign(data: iterableCreateCampaignBody): Promise<number> {
+  async createCampaign(data: IterableCreateCampaignBody): Promise<number> {
     const response: AxiosResponse<{ campaignId: number }> = await this.client.post(
       '/campaigns/create',
       data
@@ -151,7 +190,7 @@ export class IterableClient {
     return response.data.campaignId
   }
   // Observable based method
-  createCampaign$ = (data: iterableCreateCampaignBody): Observable<number> => {
+  createCampaign$ = (data: IterableCreateCampaignBody): Observable<number> => {
     return from(this.createCampaign(data))
   }
 
@@ -167,29 +206,29 @@ export class IterableClient {
     return from(this.archiveCampaigns(data))
   }
 
-  async activateTriggeredCampaign(data: Record<string, number>): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/campaigns/activateTriggered', data)
+  async activateTriggeredCampaign(data: Record<string, number>): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.post('/campaigns/activateTriggered', data)
     return response.data
   }
   // Observable based method
-  activateTriggeredCampaign$ = (data: Record<string, number>): Observable<iterableCampaignResponse> => {
+  activateTriggeredCampaign$ = (data: Record<string, number>): Observable<IterableCampaignResponse> => {
     return from(this.activateTriggeredCampaign(data))
   }
 
-  async triggerCampaign(data: iterableTriggerCampaignBody): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/campaigns/trigger', data)
+  async triggerCampaign(data: IterableTriggerCampaignBody): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.post('/campaigns/trigger', data)
     return response.data
   }
-  triggerCampaign$ = (data: iterableTriggerCampaignBody): Observable<iterableCampaignResponse> => {
+  triggerCampaign$ = (data: IterableTriggerCampaignBody): Observable<IterableCampaignResponse> => {
     return from(this.triggerCampaign(data))
   }
 
-  async deactivateTriggeredCampaign(data: Record<string, number>): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/campaigns/deactivateTriggered', data)
+  async deactivateTriggeredCampaign(data: Record<string, number>): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.post('/campaigns/deactivateTriggered', data)
     return response.data
   }
   // Observable based method
-  deactivateTriggeredCampaign$ = (data: Record<string, number>): Observable<iterableCampaignResponse> => {
+  deactivateTriggeredCampaign$ = (data: Record<string, number>): Observable<IterableCampaignResponse> => {
     return from(this.deactivateTriggeredCampaign(data))
   }
 
@@ -252,41 +291,41 @@ export class IterableClient {
     return from(this.unsubUsersFromList(data))
   }
 
-  async deleteList(listId: number): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.delete(`/lists/${listId}`)
+  async deleteList(listId: number): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.delete(`/lists/${listId}`)
     return response.data
   }
   // Observable based method
-  deleteList$ = (listId: number): Observable<iterableCampaignResponse> => {
+  deleteList$ = (listId: number): Observable<IterableCampaignResponse> => {
     return from(this.deleteList(listId))
   }
 
   /* ==== EMAIL CALL ==== */
-  async sendEmailToAddress(data: sendEmailBody): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/email/target', data)
+  async sendEmailToAddress(data: SendEmailBody): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.post('/email/target', data)
     return response.data
   }
   // Observable based method
-  sendEmailToAddress$ = (data: sendEmailBody): Observable<iterableCampaignResponse> => {
+  sendEmailToAddress$ = (data: SendEmailBody): Observable<IterableCampaignResponse> => {
     return from(this.sendEmailToAddress(data))
   }
 
   /* ==== SMS CALLS ==== */
-  async sendSMS(data: sendSMSBody): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/sms/target', data)
+  async sendSMS(data: SendSMSBody): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.post('/sms/target', data)
     return response.data
   }
 
-  sendSMS$ = (data: sendSMSBody): Observable<iterableCampaignResponse> => {
+  sendSMS$ = (data: SendSMSBody): Observable<IterableCampaignResponse> => {
     return from(this.sendSMS(data))
   }
 
-  async cancelSMS(data: cancelSMSBody): Promise<iterableCampaignResponse> {
-    const response: AxiosResponse<iterableCampaignResponse> = await this.client.post('/sms/cancel', data)
+  async cancelSMS(data: CancelSMSBody): Promise<IterableCampaignResponse> {
+    const response: AxiosResponse<IterableCampaignResponse> = await this.client.post('/sms/cancel', data)
     return response.data
   }
 
-  cancelSMS$ = (data: cancelSMSBody): Observable<iterableCampaignResponse> => {
+  cancelSMS$ = (data: CancelSMSBody): Observable<IterableCampaignResponse> => {
     return from(this.cancelSMS(data))
   }
 }
